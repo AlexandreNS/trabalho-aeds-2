@@ -91,7 +91,7 @@ int pilhaVazia(Pilha* p){
 void printPilha(Pilha* p){
   if(pilhaVazia(p)) printf("A lista está Vazia!!!\n");
   else {
-    Elemento* aux = l->topo;
+    Elemento* aux = p->topo;
     for (int i = 0; aux != NULL; i++) {
       printf("%d° Carta: %d - %d\n", i+1, aux->valor.numero, aux->valor.nipe);
       aux = aux->proximo;
