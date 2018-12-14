@@ -1,3 +1,11 @@
+enum numero_carta{AS=1, DOIS, TRES, QUATRO, CINCO, SEIS, SETE, OITO, NOVE, DEZ, VALETE, DAMA, REI};
+enum naipe_carta{PAUS=1, OUROS, COPAS, ESPADAS};
+
+char NUMERO_CARTAS[][15] = {"AS", "DOIS", "TRES", "QUATRO",
+"CINCO", "SEIS", "SETE", "OITO", "NOVE", "DEZ", "VALETE", "DAMA", "REI"};
+
+char NAIPE_CARTAS[][15] = {"PAUS", "OUROS", "COPAS", "ESPADAS"};
+
 typedef struct CartaTag Carta;
 typedef struct JogadorTag Jogador;
 typedef struct ElementoTag Elemento;
@@ -16,6 +24,7 @@ void limparLista(Lista*);
 void excluirLista(Lista*);
 int insere_ultimoLista(Lista*, Carta);
 int insere_posicaoLista(Lista*, int, Carta);
+int insere_ordenadoLista(Lista* l, Carta c);
 int remove_ultimoLista(Lista*, Carta*);
 int remove_posicaoLista(Lista*, int, Carta*);
 int recupera_chaveLista(Lista*, Carta);
@@ -24,9 +33,12 @@ int countLista(Lista*);
 int listaVazia(Lista*);
 void printLista(Lista*);
 
+void formataString(char texto[]);
+void printCarta(int id, int numero, int naipe);
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 typedef struct CartaTag{
-  int nipe;
+  int naipe;
   int numero;
 }Carta;
 
@@ -88,12 +100,21 @@ int pilhaVazia(Pilha* p){
   if(p->topo == NULL) return 1;
   else return 0;
 }
+int countPilha(Pilha* p){
+  Elemento* aux = p->topo;
+  int count = 0;
+  while(aux != NULL){
+    aux = aux->proximo;
+    count++;
+  }
+  return count;
+}
 void printPilha(Pilha* p){
   if(pilhaVazia(p)) printf("A lista está Vazia!!!\n");
   else {
     Elemento* aux = p->topo;
     for (int i = 0; aux != NULL; i++) {
-      printf("%d° Carta: %d - %d\n", i+1, aux->valor.numero, aux->valor.nipe);
+      printf("%d° Carta: %d - %d\n", i+1, aux->valor.numero, aux->valor.naipe);
       aux = aux->proximo;
     }
   }
@@ -153,6 +174,17 @@ int insere_posicaoLista(Lista* l, int p, Carta v){
   }
   return 1;
 }
+int insere_ordenadoLista(Lista* l, Carta c){
+  Elemento* aux = l->inicio;
+  int p = 1;
+  while(aux != NULL){
+    if(c.numero <= aux->valor.numero) break;
+    else p++;
+    aux = aux->proximo;
+  }
+  insere_posicaoLista(l, p, c);
+  return 0;
+}
 int remove_ultimoLista(Lista* l, Carta* v){
   if(listaVazia(l)) return 0;
   else{
@@ -177,6 +209,7 @@ int remove_posicaoLista(Lista* l, int p, Carta* v){
 
   if(p < 1 || p > countLista(l)) return 0;
   else if(p == 1){
+    *v = aux->valor;
     l->inicio = l->inicio->proximo;
     free(aux);
   }else{
@@ -186,6 +219,7 @@ int remove_posicaoLista(Lista* l, int p, Carta* v){
       count++;
     }
     Elemento *aux2 = aux->proximo;
+    *v = aux2->valor;
     aux->proximo = aux->proximo->proximo;
     free(aux2);
   }
@@ -239,9 +273,17 @@ void printLista(Lista* l){
   else {
     Elemento* aux = l->inicio;
     for (int i = 0; aux != NULL; i++) {
-      printf("%d° Carta: %d - %d\n", i+1, aux->valor.numero, aux->valor.nipe);
+      // printf("%d° Carta: %d - %d\n", i+1, aux->valor.numero, aux->valor.naipe);
+      printCarta(i+1, aux->valor.numero, aux->valor.naipe);
       aux = aux->proximo;
     }
   }
 }
 //////////////////////////////////////////////////////////////////////////////////////////
+void formataString(char texto[]){
+  int len = strlen(texto);
+  if(texto[len-1] == '\n') texto[len-1] = 0;
+}
+void printCarta(int id, int numero, int naipe){
+  printf("%d° Carta: %s - %s\n", id, NUMERO_CARTAS[numero-1], NAIPE_CARTAS[naipe-1]);
+}
