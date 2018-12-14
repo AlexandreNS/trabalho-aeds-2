@@ -49,6 +49,8 @@ int main(int argc, char const *argv[]){
   // // setbuf(stdin, NULL);
   //
   embaralha(num_baralhos, compra);
+
+  registraInicio(jogadores, num_jogadores, compra);
   printJogador(jogadores, num_jogadores);
   Carta carta_atual;
   int continua_jogada = 0;
@@ -63,6 +65,7 @@ int main(int argc, char const *argv[]){
 
   printf("\n\n\n\n\n");
 
+  registraFinal(jogadores, num_jogadores, descarte);
   ganhadores(jogadores, num_jogadores);
   return 0;
 }

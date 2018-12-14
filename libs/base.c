@@ -1,17 +1,19 @@
+// variarveis para manipular o baralho
 enum numero_carta{AS=1, DOIS, TRES, QUATRO, CINCO, SEIS, SETE, OITO, NOVE, DEZ, VALETE, DAMA, REI};
 enum naipe_carta{PAUS=1, OUROS, COPAS, ESPADAS};
 
 char NUMERO_CARTAS[][15] = {"AS", "DOIS", "TRES", "QUATRO",
 "CINCO", "SEIS", "SETE", "OITO", "NOVE", "DEZ", "VALETE", "DAMA", "REI"};
-
 char NAIPE_CARTAS[][15] = {"PAUS", "OUROS", "COPAS", "ESPADAS"};
 
+// todas as structs do jogo
 typedef struct CartaTag Carta;
 typedef struct JogadorTag Jogador;
 typedef struct ElementoTag Elemento;
 typedef struct PilhaTag Pilha;
 typedef struct ListaTag Lista;
 
+// funcoes de manipulação de pilha
 Pilha* criaPilha();
 void liberaPilha(Pilha*);
 int empilha(Pilha*, Carta);
@@ -19,6 +21,7 @@ int desempilha(Pilha*, Carta*);
 int pilhaVazia(Pilha*);
 void printPilha(Pilha*);
 
+// funcoes de manipulação de lista
 Lista* criarLista();
 void limparLista(Lista*);
 void excluirLista(Lista*);
@@ -33,10 +36,13 @@ int countLista(Lista*);
 int listaVazia(Lista*);
 void printLista(Lista*);
 
+// funcoes com utilidade adicional
 void formataString(char texto[]);
 void printCarta(int id, int numero, int naipe);
+void sprintCarta(int id, int numero, int naipe, char texto[]);
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
+
 typedef struct CartaTag{
   int naipe;
   int numero;
@@ -114,7 +120,7 @@ void printPilha(Pilha* p){
   else {
     Elemento* aux = p->topo;
     for (int i = 0; aux != NULL; i++) {
-      printf("%d° Carta: %d - %d\n", i+1, aux->valor.numero, aux->valor.naipe);
+      printCarta(i+1, aux->valor.numero, aux->valor.naipe);
       aux = aux->proximo;
     }
   }
@@ -273,7 +279,6 @@ void printLista(Lista* l){
   else {
     Elemento* aux = l->inicio;
     for (int i = 0; aux != NULL; i++) {
-      // printf("%d° Carta: %d - %d\n", i+1, aux->valor.numero, aux->valor.naipe);
       printCarta(i+1, aux->valor.numero, aux->valor.naipe);
       aux = aux->proximo;
     }
@@ -286,4 +291,7 @@ void formataString(char texto[]){
 }
 void printCarta(int id, int numero, int naipe){
   printf("%d° Carta: %s - %s\n", id, NUMERO_CARTAS[numero-1], NAIPE_CARTAS[naipe-1]);
+}
+void sprintCarta(int id, int numero, int naipe, char texto[]){
+  sprintf(texto, "- %s - %s\n", NUMERO_CARTAS[numero-1], NAIPE_CARTAS[naipe-1]);
 }
